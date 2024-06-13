@@ -1,0 +1,14 @@
+:root {
+
+    /* Option1: White theme */
+    /* --primary-color: #599561;
+    --secondary-color: white;
+    --winner-text-color: var(--primary-color);
+    --background-color: white; */
+
+    /* Option2: Green theme */
+    --primary-color: white;
+    --secondary-color: #599561;
+    --winner-text-color: var(--primary-color);
+    --background-color: #7cc496;
+}
