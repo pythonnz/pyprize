@@ -102,7 +102,7 @@ async def get_next(request: Request) -> Union[str | None]:
     with Session(engine) as session:
         query = (
             select(Candidate)
-            .where(Candidate.already_won is False)
+            .where(Candidate.already_won == False)  # noqa: E712
             .order_by(func.random())
             .limit(1)
         )
