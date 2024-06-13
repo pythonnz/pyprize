@@ -4,6 +4,8 @@ venv/
 *.xlsx
 .ruff_cache/
 *.db
+*.csv
+.DS_Store
 
 __pycache__/
 *.py[cod]

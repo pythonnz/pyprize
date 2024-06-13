@@ -1,5 +1,6 @@
 import json
 import os
+import csv
 
 from pathlib import Path
 from typing import List, Dict, Optional, Union, Set
@@ -27,7 +28,6 @@ def find_pretix_data() -> Path:
     root_dir = Path(__file__).resolve().parent.parent
     files = os.listdir(root_dir)
     for f in files:
-        print(f)
         if f.endswith("_pretixdata.json"):
             return Path(f"{root_dir}/{f}")
     raise FileNotFoundError("Could not find pretixdata.json in root of repository.")
@@ -55,9 +55,13 @@ def get_names() -> Set[str]:
         orders = load_orders(pretix_data_path)
         return set(get_names_from_orders(orders))
     except FileNotFoundError:
-        with open(CSV_NAME, "r") as csvfile:
-            reader = csv.reader(csvfile)
-            return set(reader)
+        pass
+
+    with open(CSV_NAME, "r") as csvfile:
+        reader = csv.reader(csvfile)
+        rows = list(reader)
+        names = set([row[0] for row in rows])
+        return names
 
 
 def delete_all():
@@ -89,7 +93,7 @@ async def index(request: Request):
         context={
             "title": TITLE,
             "theme": THEME,
-        }
+        },
     )
 
 
@@ -98,7 +102,7 @@ async def get_next(request: Request) -> Union[str | None]:
     with Session(engine) as session:
         query = (
             select(Candidate)
-            .where(Candidate.already_won == False)
+            .where(Candidate.already_won is False)
             .order_by(func.random())
             .limit(1)
         )
@@ -114,6 +118,7 @@ async def get_next(request: Request) -> Union[str | None]:
         else:
             return json.dumps({"name": "", "feedback": "No winners left"})
 
+
 @app.get("/clear")
 async def wipe_table():
     delete_all()
@@ -126,10 +131,10 @@ CSV_NAME = os.environ.get("CSV_NAME", "candidates.csv")
 PRETIX_EXPORT = os.environ.get("PRETIX_EXPORT", "2024_pretixdata.json")
 THEME = {
     "name": "KiwiPyCon2024",
-    "favicon": "https://images.squarespace-cdn.com/content/628a8ae9fe38b23ef951d7ef/1d24ee2f-fa7c-4ae6-adf8-2b628f702eb8/kiwi-pycon-xiii-favicon.png?format=100w&content-type=image%2Fpng",
-    "logo": "https://images.squarespace-cdn.com/content/v1/628a8ae9fe38b23ef951d7ef/d5339dfd-f142-4d42-9a69-7d7bf97959fa/kiwi-pycon-xiii-logo.png?format=2500w",
+    "favicon": "static/themes/KiwiPyCon2024/favicon.png",
+    "logo": "static/themes/KiwiPyCon2024/kiwi-pycon-xiii-logo.png",
 }
 
 sqlite_url = f"sqlite:///{DB_NAME}"
-engine = create_engine(sqlite_url, echo=True)
+engine = create_engine(sqlite_url, echo=False)
 SQLModel.metadata.create_all(engine)
