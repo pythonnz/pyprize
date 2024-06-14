@@ -18,8 +18,12 @@ body {
     padding: 100px 0px;
 }
 
+#winner_details {
+    font-size: 3em;
+}
+
 #winner_name {
-    font-size: 8rem;
+    font-size: 3em;
     text-transform: capitalize;
 }
 
@@ -28,11 +32,11 @@ body {
 }
 
 #controls {
-    padding: 20px;
+    padding: 20px 0px;
 }
 
 .pyprize-button {
-    padding: 20px 50px;
+    display: block;
     text-decoration: none;
     color: var(--primary-color);
     font-size: 2.5rem;

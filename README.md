@@ -26,11 +26,11 @@ Open your browser to http://localhost:8000/
 
 ## Usage
 
-Click 'Fresh Import' to reset set the initial state of the database with the data from the filesystem
+Click ⚙️ to go to the admin page and then click 'Fresh Import' to reset set the initial state of the database with the data from the filesystem
 
-Click the `Draw Winner` button to draw a new winner. You can also press `spacebar` or `enter`.
+Click 🏠 to go back to the main screen
 
-Click the `Clear` to reset ready for the next prize draw. You can also press `spacebar` or `enter`.
+Progress the prize draw by pressing `spacebar` or `enter` or clicking in the middle of the screen.
 
 ## Getting data
 

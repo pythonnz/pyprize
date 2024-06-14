@@ -84,6 +84,19 @@ def refresh_table():
     return "Successfully updated database of candidates"
 
 
+@app.get("/admin", response_class=HTMLResponse)
+async def admin(request: Request):
+    templates = Jinja2Templates(directory="app/templates")
+    return templates.TemplateResponse(
+        request=request,
+        name="admin.html",
+        context={
+            "title": TITLE,
+            "theme": THEME,
+        },
+    )
+
+
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
     templates = Jinja2Templates(directory="app/templates")

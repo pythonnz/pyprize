@@ -15,37 +15,35 @@ function draw(){
           $('#feedback').text(res['feedback']);
         }
     });
-    $('#next_button').hide();
-    $('#clear_button').show();
     state = states.DRAWN;
 }
 
 function clear(){
-    $('#winner_name').html('');
-    $('#next_button').show();
-    $('#clear_button').hide();
+    $('#winner_name').html('...');
     state = states.CLEARED;
 }
 
-jQuery(document).ready(function($){
+function clear_or_draw(){
+    if (state == states.CLEARED) {
+        draw();
+    } else if (state == states.DRAWN) {
+        clear();
+    }
+}
 
-    $('#clear_button').hide();
+jQuery(document).ready(function($){
 
     $(document).on('keydown', function(e) {
         // on spacebar or enter
         if (e.which === 32 || e.which === 13) {
             e.preventDefault();
-            if (state == states.CLEARED) {
-                draw();
-            } else if (state == states.DRAWN) {
-                clear();
-            }
+            clear_or_draw()
         }
     });
 
-    $('#next_button').click(draw);
-
-    $('#clear_button').click(clear);
+    $("#winner_details").on('click', function(e) {
+        clear_or_draw()
+    });
 
     $('#freshen_import').click(function() {
         $.ajax({
