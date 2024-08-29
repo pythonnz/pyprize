@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import List, Dict, Optional, Union, Set
 
 from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
@@ -130,6 +130,17 @@ async def get_next(request: Request) -> Union[str | None]:
             return json.dumps({"name": winner.name, "feedback": ""})
         else:
             return json.dumps({"name": "", "feedback": "No winners left"})
+
+
+@app.get("/winners", response_class=JSONResponse)
+async def get_all_winners(request: Request) -> JSONResponse:
+    with Session(engine) as session:
+        query = (
+            select(Candidate)
+            .where(Candidate.already_won == True)
+        )
+        winners = [winner.name for winner in session.exec(query).all()]
+        return JSONResponse(content=winners)
 
 
 @app.get("/clear")

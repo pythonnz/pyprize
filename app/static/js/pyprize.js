@@ -64,5 +64,24 @@ jQuery(document).ready(function($){
             }
         });
     });
+
+    $('#get_all_winners').click(function() {
+        $.ajax({
+            url: '/winners',
+            type: 'GET',
+            success: function (result) {
+                let winnerNames = $('#winner_names');
+                $('#winner_names_header').removeClass('d-none');
+                winnerNames.empty();
+                if (result && result.length > 0) {
+                    result.forEach(function(winner) {
+                        winnerNames.append('<tr><td>' + winner + '</td></tr>');
+                    });
+                }else{
+                    winnerNames.append('<tr><td>There isn\'t any winner.</td></tr>');
+                }
+            }
+        });
+    });
 });
 
