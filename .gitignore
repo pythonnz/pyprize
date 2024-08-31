@@ -1,5 +1,8 @@
 # Byte-compiled / optimized / DLL files
+.venv
 venv/
+
+.mypy_cache/
 *pretixdata*
 *.xlsx
 .ruff_cache/

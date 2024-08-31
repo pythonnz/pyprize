@@ -1,0 +1,16 @@
+name: Pip Audit
+on:  [ push ]
+
+jobs:
+  pip-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - uses: yezz123/setup-uv@v4
+      - name: check
+        run: |
+          uv run pip-audit
