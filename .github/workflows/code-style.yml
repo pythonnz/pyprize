@@ -1,0 +1,32 @@
+name: Code Check
+on:  [ push, pull_request ]
+
+jobs:
+  ruff-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: chartboost/ruff-action@v1
+      - name: Install Python
+        uses: actions/setup-python@v5
+      - name: Run Ruff
+        run: ruff check --output-format=github .
+
+  ruff-format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: chartboost/ruff-action@v1
+      - name: Install Python
+        uses: actions/setup-python@v5
+      - name: Ruff Format Check
+        run: ruff format --diff
+
+  pip-audit:
+    steps:
+      - uses: chartboost/ruff-action@v1
+      - uses: yezz123/setup-uv@v4
+      - run: uv export > requirements.txt
+      - uses: pypa/gh-action-pip-audit@v1.0.0
+        with:
+          inputs: requirements.txt

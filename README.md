@@ -2,13 +2,9 @@
 
 Simple prize draw generator for displaying at a conference etc. Runs as a local web app.
 
-## Installation
+This project uses [`uv`](https://docs.astral.sh/uv).
 
-```bash
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-```
+## Quick Start
 
 Get data and place it in the root of the pyprize repo. See the section below for detailed information about getting data. E.g.
 
@@ -19,18 +15,37 @@ cp candidates.csv.example candidates.csv
 Start the server
 
 ```bash
-fastapi dev app/main.py
+uv run fastapi dev
 ```
 
 Open your browser to http://localhost:8000/
 
-## Usage
+### Usage
 
-Click ⚙️ to go to the admin page and then click 'Fresh Import' to reset set the initial state of the database with the data from the filesystem
+ * Click ⚙️ to go to the admin page and then click `FRESH IMPORT` to reset set the initial state of the database with the data from the filesystem
 
-Click 🏠 to go back to the main screen
+ * Click 🏠 to go back to the main screen
 
-Progress the prize draw by pressing `spacebar` or `enter` or clicking in the middle of the screen.
+ * Progress the prize draw by pressing `spacebar` or `enter` or clicking in the middle of the screen.
+
+ * Reset the prize draw by clicking ⚙️ then `FRESH IMPORT`. This will drop the existing database and re import from our data source into a fresh database.
+
+### Building and Running with Docker
+
+```bash
+docker build -t pyprize .
+```
+
+```bash
+docker run -p 8000:80 pyprize
+```
+
+```bash
+docker run \
+  -v "$(pwd)/candidates.csv.example:/app/candidates.csv" \
+  -p 8000:80 \
+  pyprize
+```
 
 ## Getting data
 
@@ -103,6 +118,6 @@ pip install -r requirements-dev.txt
 Check and format with ruff
 
 ```bash
-ruff check .
+uv run ruff check .
 ruff format .
 ```
