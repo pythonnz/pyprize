@@ -1,5 +1,8 @@
 # pyprize
 
+![Code Style](https://github.com/pythonnz/pyprize/actions/workflows/code-style.yml/badge.svg)
+![Dependencies](https://github.com/pythonnz/pyprize/actions/workflows/pip-audit.yml/badge.svg)
+
 Simple prize draw generator for displaying at a conference etc. Runs as a local web app.
 
 This project uses [`uv`](https://docs.astral.sh/uv).
