@@ -1,4 +1,4 @@
-name: Code Check
+name: Pip Audit
 on:  [ push ]
 
 jobs:
