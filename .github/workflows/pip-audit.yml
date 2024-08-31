@@ -8,11 +8,9 @@ jobs:
       - uses: actions/checkout@v4
       - uses: yezz123/setup-uv@v4
       - run: |
-          uv export > requirements.txt
-          uv sync
-          ls -laR
-          pwd
+          uv export >> requirements.txt
+          ls -la requirements.txt
       - uses: pypa/gh-action-pip-audit@v1.0.0
         with:
-          # inputs: requirements.txt
-          virtual-environment: .venv/
+          inputs: requirements.txt
+          # virtual-environment: .venv/
