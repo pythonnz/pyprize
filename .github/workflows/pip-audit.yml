@@ -12,5 +12,5 @@ jobs:
           python-version: "3.11"
       - uses: yezz123/setup-uv@v4
       - name: pip-audit
-      - run: |
+        run: |
           uv run pip-audit
