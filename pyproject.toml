@@ -11,5 +11,6 @@ dependencies = [
 
 [tool.uv]
 dev-dependencies = [
+    "pip-audit>=2.7.3",
     "ruff>=0.6.3",
 ]
