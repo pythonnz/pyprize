@@ -37,7 +37,12 @@ jobs:
     steps:
       - uses: chartboost/ruff-action@v1
       - uses: yezz123/setup-uv@v4
-      - run: uv export > requirements.txt
+      - run: |
+          pwd
+          ls -laR
+          pwd
+          which uv
+          uv export > requirements.txt
       - uses: pypa/gh-action-pip-audit@v1.0.0
         with:
           inputs: requirements.txt
