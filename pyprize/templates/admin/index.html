@@ -5,20 +5,31 @@
 <div class="container">
     <a class="pyprize-button" id="freshen_import">Fresh Import</a><br>
     <a class="pyprize-button" id="wipe_data">Clear Database</a><br>
-    <a class="pyprize-button" id="get_all_winners">Get all winners</a><br>
+
+    <h2>Winners</h2>
+
+    <table class="table">
+        {% for winner in winners %}
+        <tr>
+            <td>{{ winner.drawn_at }}</td>
+            <td>{{ winner.name }}</td>
+        </tr>
+        {% endfor  %}
+    </table>
+
+    <h2>Candidate Pool</h2>
+    <ul>
+        {% for candidate in candidates %}
+        <li>{{ candidate.name }}</li>
+        {% endfor  %}
+    </ul>
+
+    <!-- <h2>Candidates Discarded</h2>
+    {% for candidate in candidates %}
+    <li>{{ candidate.name }}</li>
+    {% endfor  %} -->
 </div>
 
-<div id="all_winners" class="text-center container">
-    <table>
-        <thead>
-            <tr id="winner_names_header" class="d-none">
-                <th>Winner Names</th>
-            </tr>
-        </thead>
-        <tbody id="winner_names">
-        </tbody>
-    </table>
-</div>
 
 <div id="controls" class="fixed-bottom">
     <div class="text-center">

@@ -12,23 +12,17 @@ from flask import (
 )
 
 from werkzeug.security import check_password_hash, generate_password_hash
-from pyprize.db import get_db
-from pyprize import settings
+
+from pyprize.models import User
+from pyprize.db import engine
+from sqlmodel import Session, select
+from sqlalchemy.exc import IntegrityError
 
 bp = Blueprint("auth", __name__, url_prefix="/auth")
 
 
 @bp.route("/register", methods=("GET", "POST"))
 def register():
-    db = get_db()
-    # NOTE this need to be update for SQMODEL way of querying
-    cursor = db.execute("SELECT COUNT(*) FROM user")
-    count = cursor.fetchone()[0]
-
-    if count >= settings.REGISTRATION_LIMIT:
-        return "registration is closed", 403
-        # return 'There are rows in the database.'
-
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
@@ -41,13 +35,14 @@ def register():
 
         if error is None:
             try:
-                # NOTE this need to be update for SQMODEL way of querying
-                db.execute(
-                    "INSERT INTO user (username, password) VALUES (?, ?)",
-                    (username, generate_password_hash(password)),
-                )
-                db.commit()
-            except db.IntegrityError:
+                with Session(engine) as session:
+                    session.add(
+                        User(
+                            username=username, password=generate_password_hash(password)
+                        )
+                    )
+                    session.commit()
+            except IntegrityError:
                 error = f"User {username} is already registered."
             else:
                 return redirect(url_for("auth.login"))
@@ -62,16 +57,17 @@ def login():
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
-        db = get_db()
         error = None
-        user = db.execute(
-            "SELECT * FROM user WHERE username = ?", (username,)
-        ).fetchone()
 
-        if user is None:
-            error = "Incorrect username."
-        elif not check_password_hash(user["password"], password):
-            error = "Incorrect password."
+        with Session(engine) as db_session:
+            query = select(User).where(User.username == username)
+            result = db_session.exec(query)
+            user = result.first()
+
+            if user is None:
+                error = "Incorrect username."
+            elif not check_password_hash(user.password, password):
+                error = "Incorrect password."
 
         if error is None:
             session.clear()
@@ -88,10 +84,10 @@ def load_logged_in_user():
     if user_id is None:
         g.user = None
     else:
-        g.user = (
-            # NOTE this need to be update for SQMODEL way of querying
-            get_db().execute("SELECT * FROM user WHERE id = ?", (user_id,)).fetchone()  # noqa
-        )
+        with Session(engine) as db_session:
+            query = select(User).where(User.id == user_id)
+            result = db_session.exec(query)
+            g.user = result.first()
 
 
 @bp.route("/logout")
