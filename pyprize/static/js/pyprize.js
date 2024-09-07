@@ -41,9 +41,9 @@ jQuery(document).ready(function($){
         }
     });
 
-    $("#winner_details").on('click', function(e) {
-        clear_or_draw()
-    });
+    // $("#winner_details").on('click', function(e) {
+    //     clear_or_draw()
+    // });
 
     $('#freshen_import').click(function() {
         $.ajax({
@@ -67,7 +67,7 @@ jQuery(document).ready(function($){
 
     $('#get_all_winners').click(function() {
         $.ajax({
-            url: '/winners',
+            url: '/admin/winners',
             type: 'GET',
             success: function (result) {
                 let winnerNames = $('#winner_names');

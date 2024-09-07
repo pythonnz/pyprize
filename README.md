@@ -18,7 +18,7 @@ cp candidates.csv.example candidates.csv
 Start the server
 
 ```bash
-uv run fastapi dev
+uv run flask --app pyprize run --debug
 ```
 
 Open your browser to http://localhost:8000/
@@ -40,13 +40,13 @@ docker build -t pyprize .
 ```
 
 ```bash
-docker run -p 8000:80 pyprize
+docker run -p 5000:5000 pyprize
 ```
 
 ```bash
 docker run \
   -v "$(pwd)/candidates.csv.example:/app/candidates.csv" \
-  -p 8000:80 \
+  -p 5000:5000 \
   pyprize
 ```
 
@@ -122,5 +122,5 @@ Check and format with ruff
 
 ```bash
 uv run ruff check .
-ruff format .
+uv run ruff format .
 ```
