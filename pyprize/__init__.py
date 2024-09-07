@@ -2,10 +2,12 @@ import os
 from flask import Flask
 
 from pyprize import settings
-from pyprize import db
 from pyprize import admin
 from pyprize import auth
 from pyprize import core
+
+from pyprize.db import create_db_and_tables
+from pyprize.models import Candidate  # noqa: F401
 
 
 def create_app(test_config=None):
@@ -29,7 +31,8 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    db.init_app(app)
+    create_db_and_tables()
+
     app.register_blueprint(core.bp)
     app.register_blueprint(auth.bp)
     app.register_blueprint(admin.bp)

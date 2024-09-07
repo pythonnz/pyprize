@@ -1,27 +1,27 @@
 import json
 from flask import Blueprint, render_template
-
-from sqlmodel import delete, select
+from sqlmodel import delete, select, Session
 from sqlalchemy.sql import func
 
-from pyprize.db import get_db
+from pyprize.db import engine
 from pyprize.utils import get_names
 from pyprize.models import Candidate
+
 
 bp = Blueprint("core", __name__, url_prefix="/")
 
 
 def delete_all():
-    with get_db() as session:
+    with Session(engine) as session:
         session.exec(delete(Candidate))
         session.commit()
 
 
 def import_all():
     names = get_names()
-    session = get_db()
-    session.add_all([Candidate(name=name) for name in names])
-    session.commit()
+    with Session(engine) as session:
+        session.add_all([Candidate(name=name) for name in names])
+        session.commit()
 
 
 @bp.get("/reset")
@@ -39,24 +39,23 @@ def index():
 
 @bp.get("/next")
 def get_next():
-    session = get_db()
-    query = (
-        select(Candidate)
-        .where(Candidate.already_won == False)  # noqa: E712
-        .order_by(func.random())
-        .limit(1)
-    )
-    results = session.exec(query)
-    winner = results.first()
+    with Session(engine) as session:
+        query = (
+            select(Candidate)
+            .where(Candidate.drawn_at == None)  # noqa: E711
+            .order_by(func.random())
+            .limit(1)
+        )
+        results = session.exec(query)
+        winner = results.first()
 
-    if winner:
-        # Mark the candidate as having won
-        winner.already_won = True
-        session.add(winner)
-        session.commit()
-        return json.dumps({"name": winner.name, "feedback": ""})
-    else:
-        return json.dumps({"name": "", "feedback": "No winners left"})
+        if winner:
+            winner.mark_as_drawn()
+            session.add(winner)
+            session.commit()
+            return json.dumps({"name": winner.name, "feedback": ""})
+        else:
+            return json.dumps({"name": "", "feedback": "No winners left"})
 
 
 @bp.get("/clear")
