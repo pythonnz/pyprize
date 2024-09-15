@@ -6,28 +6,36 @@
     <a class="pyprize-button" id="freshen_import">Fresh Import</a><br>
     <a class="pyprize-button" id="wipe_data">Clear Database</a><br>
 
-    <h2>Winners</h2>
+    <h3>Prizes Awarded</h3>
 
     <table class="table">
-        {% for winner in winners %}
+        {% for candidate in awarded %}
         <tr>
-            <td>{{ winner.drawn_at }}</td>
-            <td>{{ winner.name }}</td>
+            <td>{{ candidate.drawn_at }}</td>
+            <td>{{ candidate.awarded_prize }}</td>
+            <td>{{ candidate.name }}</td>
         </tr>
         {% endfor  %}
     </table>
 
-    <h2>Candidate Pool</h2>
+    <h3>Drawn but not Awarded</h3>
+
+    <table class="table">
+        {% for candidate in not_awarded %}
+        <tr>
+            <td>{{ candidate.drawn_at }}</td>
+            <td>{{ candidate.awarded_prize }}</td>
+            <td>{{ candidate.name }}</td>
+        </tr>
+        {% endfor  %}
+    </table>
+
+    <h3>Candidates not Drawn</h3>
     <ul>
         {% for candidate in candidates %}
         <li>{{ candidate.name }}</li>
         {% endfor  %}
     </ul>
-
-    <!-- <h2>Candidates Discarded</h2>
-    {% for candidate in candidates %}
-    <li>{{ candidate.name }}</li>
-    {% endfor  %} -->
 </div>
 
 

@@ -14,25 +14,23 @@ def index():
         results = session.exec(statement)
 
         winners = []
+        not_awarded = []
         candidates = []
 
         for candidate in results:
             if candidate.drawn_at is None:
                 candidates.append(candidate)
+            elif candidate.awarded_prize is False:
+                not_awarded.append(candidate)
             else:
                 winners.append(candidate)
 
         context = {
-            "winners": sorted(winners, key=lambda winner: winner.drawn_at),
+            "awarded": sorted(winners, key=lambda candidate: candidate.drawn_at),
+            "not_awarded": sorted(
+                not_awarded, key=lambda candidate: candidate.drawn_at
+            ),
             "candidates": candidates,
         }
 
         return render_template("admin/index.html", **context)
-
-
-# @bp.get("/winners")
-# def get_all_winners():
-#     with Session(engine) as session:
-#         query = select(Candidate).where(Candidate.drawn_at != None)  # noqa: E712 E501
-#         winners = [winner.name for winner in session.exec(query).all()]
-#         return winners

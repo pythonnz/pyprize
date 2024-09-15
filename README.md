@@ -29,7 +29,9 @@ Open your browser to http://localhost:8000/
 
  * Click 🏠 to go back to the main screen
 
- * Progress the prize draw by pressing `spacebar` or `enter` or clicking in the middle of the screen.
+ * Draw a user by pressing `spacebar` or `enter` key.
+
+ * Confirm the prize will be awarded by the drawn candidate by pressing the ➡️ or press ⬅️ to reject the prize draw. 'rejected' candidates will be marked has having been drawn but not awarded the prize.
 
  * Reset the prize draw by clicking ⚙️ then `FRESH IMPORT`. This will drop the existing database and re import from our data source into a fresh database.
 

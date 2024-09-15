@@ -1,5 +1,4 @@
-import json
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, jsonify, request
 from sqlmodel import delete, select, Session
 from sqlalchemy.sql import func
 
@@ -49,13 +48,35 @@ def get_next():
         results = session.exec(query)
         winner = results.first()
 
+        winner_json = winner.model_dump()
+
         if winner:
             winner.mark_as_drawn()
             session.add(winner)
             session.commit()
-            return json.dumps({"name": winner.name, "feedback": ""})
+            return jsonify({"candidate": winner_json, "feedback": ""})
         else:
-            return json.dumps({"name": "", "feedback": "No winners left"})
+            return jsonify({"candidate": "", "feedback": "No winners left"})
+
+
+@bp.post("/candidate/<int:candidate_id>/award")
+def award(candidate_id: int):
+    award_prize = request.json.get("award_prize", False)
+
+    with Session(engine) as session:
+        query = (
+            select(Candidate).where(Candidate.id == candidate_id)  # noqa: E711
+        )
+        results = session.exec(query)
+        candidate = results.first()
+
+        if award_prize:
+            candidate.awarded_prize = True
+
+        session.add(candidate)
+        session.commit()
+
+    return ("OK", 200)
 
 
 @bp.get("/clear")
