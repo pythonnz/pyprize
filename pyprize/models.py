@@ -14,12 +14,9 @@ class Candidate(SQLModel, table=True):
     def mark_as_drawn(self):
         self.drawn_at = datetime.now()
 
-    def mark_as_accepted(self):
-        self.drawn_at = datetime.now()
+    # TODO(iokiwi): 
+    def award_prize(self, prize=None):
         self.awarded_prize = True
-
-    def mark_as_passed(self):
-        self.drawn_at = datetime.now()
 
 
 class User(SQLModel, table=True):

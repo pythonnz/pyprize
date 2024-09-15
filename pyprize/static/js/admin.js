@@ -6,6 +6,7 @@ jQuery(document).ready(function($){
             type: 'GET',
             success: function (result) {
               $('#feedback').text(result);
+              window.location.reload(true);
             }
         });
     });
@@ -15,7 +16,8 @@ jQuery(document).ready(function($){
             url: '/clear',
             type: 'GET',
             success: function (result) {
-              $('#feedback').text(result);
+                $('#feedback').text(result);
+                window.location.reload(true);
             }
         });
     });
